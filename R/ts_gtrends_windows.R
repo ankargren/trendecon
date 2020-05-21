@@ -36,6 +36,7 @@ ts_gtrends_windows <- function(keyword = NA,
     rowwise() %>%
     mutate(start_date = ifelse(prevent_window_shrinkage & end_date == Sys.Date(), seq(start_date, length.out = 2, by = paste0("-", windowsize))[1], start_date)) %>%
     ungroup() %>%
+      mutate(end_date = as.Date(end_date)) %>%
     transmute(
       # Using as.Date because the different variations of if(_)else each have their problems
       window = sprintf("%s %s", as.Date(start_date, origin = "1970-01-01"), as.Date(end_date, origin = "1970-01-01"))
