@@ -24,7 +24,9 @@ ts_gtrends_windows <- function(keyword = NA,
   tbl <- start_end_tbl(from, n_windows, stepsize, windowsize)
 
     # truncate end date to Sys.Date() to avoid google errors
-    tbl <- tbl[1:nrow(tbl),] %>% mutate(end_date = if_else(end_date > Sys.Date(), Sys.Date(), end_date)) %>%
+    tbl <- tbl %>% mutate(end_date = as.Date(as.numeric(end_date), origin =
+      "1970-01-01"))
+    tbl <- tbl %>% mutate(end_date = if_else(end_date > Sys.Date(), Sys.Date(), end_date)) %>%
     (function(x) {
       if (prevent_window_shrinkage) {
         distinct(x, end_date, .keep_all = TRUE)
